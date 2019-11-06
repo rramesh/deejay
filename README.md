@@ -27,7 +27,11 @@ The application appends requests to a playlist file on the system where the serv
 DEEJAY_PLAYLIST_FILE=~/deejay/playlist.txt bin/deejay
 `
 
-The application runs on port `9092`. Once the application runs starts the player script (`play.sh`). For example on Mac OSX, like below.
+The application runs by default on port `9092`. It can be changed by specifying `service.port` property in `application.properties` or by setting `DEEJAY_SERVICE_PORT` environment variable before running or passing when running the application, like below.
+
+`DEEJAY_SERVICE_PORT=7833 bin/deejay`
+
+Once the application runs, start the player script (`play.sh`). For example on Mac OSX, like below.
 
 `
 $./play.sh /Applications/VLC.app/Contents/MacOS/VLC /tmp/deejay.txt

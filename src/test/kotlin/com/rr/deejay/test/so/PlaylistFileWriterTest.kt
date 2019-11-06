@@ -14,18 +14,19 @@ import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlaylistFileWriterTest {
+    lateinit var tempFile :File
+
     @InjectMockKs
     @MockK
     lateinit var mockPlaylistFileWriter: PlaylistFileWriter
 
-    lateinit var tempFile :File
     @BeforeAll
     fun setup() {
         tempFile = createTempFile()
         mockkObject(ServiceRunner)
         every{ ServiceRunner.serviceComponent.inject(any() as PlaylistFileWriter)} just runs
         MockKAnnotations.init(this, relaxUnitFun = true)
-        every { mockPlaylistFileWriter invoke "openPlaylistFile" withArguments listOf()} returns tempFile
+        every { mockPlaylistFileWriter getProperty "playlistFile"} returns tempFile
     }
 
     @Test
@@ -35,10 +36,7 @@ class PlaylistFileWriterTest {
         playWriter.write("URL to write")
         val text = tempFile.readText()
         assertEquals("URL to write\n", text)
-        verifySequence {
-            playWriter.write("URL to write")
-            playWriter getProperty "playlistFile"
-        }
+        verifySequence { playWriter.write("URL to write")}
     }
 
     @AfterAll

@@ -4,16 +4,17 @@ import com.google.common.io.Resources.getResource
 import com.rr.deejay.logger
 import org.apache.logging.log4j.Level.toLevel
 import org.apache.logging.log4j.core.config.Configurator
+import java.io.File
 import java.lang.System.getenv
 import java.util.*
 import javax.inject.Singleton
 
 @Singleton
-class Configuration(
-    resourceFile: String = "application.properties",
-    private val envPrefix: String = "DEEJAY",
-    env: Map<String, String> = getenv()
-) {
+class Configuration (
+    val envPrefix: String = "DEEJAY",
+    val env: Map<String, String> = getenv(),
+    val resourceFile: String = "application.properties") {
+    private var playlistFile: File
     private val props = Properties()
     init {
         try{
@@ -24,27 +25,46 @@ class Configuration(
         }
 
         readEnv(env)
+        playlistFile = openPlaylistFile()
         props.getProperty("log.level")?.let {
-            Configurator.setLevel("com.rr", toLevel(it))
+            Configurator.setLevel("com.rr.deejay", toLevel(it))
         }
-    }
-    fun getProperties() : Properties {
-        return props
     }
 
-    fun getPlaylistFileName() : String? {
-        var fileName = System.getProperty("deejay.playlist.file")
-        logger.info("Parameter Property passed - ${fileName}")
-        if (!fileName.isNullOrBlank()) return fileName
-        fileName = props.get("deejay.playlist.file") as String?
-        logger.info("Parameter Property picked from Environment variable - ${fileName}")
-        if (!fileName.isNullOrBlank()) return fileName
-        fileName = props.get("playlist.file") as String?
-        logger.info("Parameter Property picked from application.properties file - ${fileName}")
-        if(fileName.isNullOrBlank()) {
-            logger.error("Deejay failed to create playlist as valid playlist file is not provided")
-            throw IllegalArgumentException("Deejay could not work as Playlist file is not provided")
+    fun getPlaylistFile() : File {
+        return playlistFile
+    }
+
+    fun getServicePort() : Int {
+        val port = props.getProperty("service.port")
+        if (port.isNullOrBlank()) return 9092
+        return try{
+            port.trim().toInt()
+        } catch(nfe: NumberFormatException) {
+            logger.warn("Warning: Non-numeric service port in service.port property. Defaulting to port 9092")
+            9092
         }
+    }
+    private fun openPlaylistFile() : File {
+        val fileName = getPlaylistFileName()
+        try {
+            val file = File(fileName)
+            file.createNewFile()
+            return file
+        } catch(ex: Exception) {
+            logger.error("FATAL. Deejay failed to boot as it could not open playlist file")
+            ex.printStackTrace()
+            throw ExceptionInInitializerError("FATAL. Deejay failed to boot as it could not open playlist file")
+        }
+    }
+
+    private fun getPlaylistFileName() : String? {
+        val fileName = props.get("playlist.file") as String?
+        if(fileName.isNullOrBlank()) {
+            logger.error("FATAL. Deejay failed to boot as valid playlist file is not provided")
+            throw ExceptionInInitializerError("Deejay failed to boot as Playlist file is not provided")
+        }
+        logger.info("Playlist file - ${fileName}")
         return fileName
     }
 

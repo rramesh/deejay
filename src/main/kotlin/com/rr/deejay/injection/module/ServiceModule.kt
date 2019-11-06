@@ -4,7 +4,7 @@ import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.rr.deejay.server.Configuration
+import com.rr.deejay.configuration
 import com.rr.deejay.service.PlaylistService
 import com.rr.deejay.service.PlaylistServiceImpl
 import com.rr.deejay.so.Playlist
@@ -13,12 +13,13 @@ import com.rr.deejay.so.PlaylistWriter
 import com.sun.org.apache.xerces.internal.util.PropertyState
 import dagger.Module
 import dagger.Provides
+import java.io.File
 import javax.inject.Singleton
 
 @Module
 class ServiceModule {
-    @Provides @Singleton fun provideConfiguration(): Configuration {
-        return Configuration()
+    @Provides @Singleton fun providePlaylistFile(): File {
+        return configuration.getPlaylistFile()
     }
 
     @Provides @Singleton fun providePlaylistWriter() : PlaylistWriter {
