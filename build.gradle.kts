@@ -55,3 +55,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         jvmTarget = "1.8"
     }
 }
+
+tasks.withType<Jar> {
+    manifest {
+        attributes("Main-Class" to "com.rr.deejay.ContainerRunnerKt")
+    }
+
+    from(configurations.compileClasspath.get().map { if (it.isDirectory()) it else zipTree(it) })
+}
