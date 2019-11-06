@@ -71,8 +71,8 @@ deejay provides a separate URL endpoint to support slack. Using the Slack's [sla
 7. That's it no more steps, you are ready to try deejay on slack
 
 If everything went well, the output should look like below with a cool response from deejay service with link preview of the Youtube video posted.
-![alt text][sample_output]
-[sample_output]: https://raw.githubusercontent.com/rramesh/deejay/master/src/main/resources/public/assets/sample_output.png "Sample Output"
+
+![alt Sample Output](https://raw.githubusercontent.com/rramesh/deejay/master/src/main/resources/public/assets/sample_output.png)
 
 Use deejay either from your own personal thread or in a channel or in a group. Using deejay in a channel or a group allows others to see what you have requested and can follow through the songs in queue or use the link to save for later listening.
 
