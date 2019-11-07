@@ -5,6 +5,7 @@ import com.google.gson.FieldAttributes
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.rr.deejay.configuration
+import com.rr.deejay.controller.PlaylistController
 import com.rr.deejay.service.PlaylistService
 import com.rr.deejay.service.PlaylistServiceImpl
 import com.rr.deejay.so.Playlist
@@ -32,6 +33,10 @@ class ServiceModule {
 
     @Provides @Singleton fun provideInternalService(): PlaylistService {
         return PlaylistServiceImpl()
+    }
+
+    @Provides @Singleton fun providePlaylistController() : PlaylistController {
+        return PlaylistController()
     }
 
     @Provides @Singleton fun gson(): Gson {

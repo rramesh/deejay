@@ -2,15 +2,17 @@ package com.rr.deejay.controller
 
 import com.google.gson.Gson
 import com.rr.deejay.ServiceRunner
-import com.rr.deejay.buttery
-import com.rr.deejay.service.PlaylistService
-import spark.Spark.get
-import spark.Spark.post
+import org.slf4j.MDC
+import spark.Spark.*
+import java.util.*
 import javax.inject.Inject
+
+private const val CORRELATION_ID_KEY = "com.rr.deejay.correlationID"
 
 class ServiceController {
     @Inject
-    lateinit var service: PlaylistService
+    lateinit var playlistController: PlaylistController
+
     @Inject
     lateinit var gson: Gson
 
@@ -20,54 +22,23 @@ class ServiceController {
     }
 
     private fun initRoutes() {
-        get("/deejay/playlist", { _, res ->
-            res.type("application/json")
-            service.currentPlaylist()
+        before("*", generateCorrelationID())
+        get("/deejay/playlist", { req, res ->
+            playlistController.processPlaylistRequest(req, res)
         }, gson::toJson)
 
         post("/deejay/slackbot", { req, res ->
-            res.type("application/json")
-            var name = req.queryParams("user_name")
-            var url = req.queryParams("text")
-            if (name.isNullOrBlank()) name = "Unknown"
-            var responseType = "ephemeral"
-            var content: String
-            if (url.isNullOrBlank()) {
-                content = "Error, either you didn't provide your name or youtube URL"
-            } else {
-                url = url.replace("<", "").replace(">", "")
-                service.addToPlaylist(name = name, youtubeUrl = url)
-                responseType = "in_channel"
-                content = butterMessage(name, url)
-            }
-            slackResponse(responseType, content)
+            playlistController.processSlackCommandRequest(req, res)
         }, gson::toJson)
 
         post("/deejay/play", { req, res ->
-            res.type("text/plain")
-            val name = req.queryParams("name")
-            val url = req.queryParams("youtubeUrl")
-            if (name.isNullOrBlank() || url.isNullOrBlank()) {
-                "Error, either you didn't provide your name or youtube URL"
-            } else {
-                service.addToPlaylist(name = name, youtubeUrl = url)
-                butterMessage(name, url, false)
-            }
+            playlistController.processPlayRequest(req, res)
         }, gson::toJson)
     }
 
-    private fun butterMessage(name: String, url: String, markdown: Boolean = true) : String{
-        val butteryIndex = (buttery.indices).random()
-        return if (markdown)
-            "*${buttery[butteryIndex]}. Thank you ${name}. I have added the song to the playlist*\n<${url}>"
-        else
-            "${buttery[butteryIndex]}. Thank you ${name}. I have added the song to the playlist. ${url}"
-    }
-
-    private fun slackResponse(responseType: String, content: String) : Map<String, Any> {
-        return mutableMapOf(
-                "response_type" to responseType,
-                "text" to content
-        )
+    private fun generateCorrelationID() : String {
+        val id = UUID.randomUUID().toString()
+        MDC.put(CORRELATION_ID_KEY, id)
+        return id
     }
 }

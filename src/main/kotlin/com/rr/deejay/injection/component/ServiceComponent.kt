@@ -1,6 +1,7 @@
 package com.rr.deejay.injection.component
 
 import com.google.gson.Gson
+import com.rr.deejay.controller.PlaylistController
 import com.rr.deejay.controller.ServiceController
 import com.rr.deejay.injection.module.ServiceModule
 import com.rr.deejay.service.PlaylistServiceImpl
@@ -16,5 +17,6 @@ interface ServiceComponent {
     fun inject(serviceRunner: PlaylistServiceImpl)
     fun inject(serviceController: ServiceController)
     fun inject(playlistFileWriter: PlaylistFileWriter)
+    fun inject(playlistController: PlaylistController)
     fun inject(playlist: Playlist)
 }

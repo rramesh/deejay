@@ -2,7 +2,7 @@
 <Configuration status="warn">
     <Appenders>
         <Console name="console">
-            <PatternLayout pattern="%d [correlationID] [%t] %p [%c{1.}] - %m %throwable%n"/>
+            <PatternLayout pattern="%d [%X{com.rr.deejay.correlationID}] [%t] %p [%c{1.}] - %m %throwable%n"/>
         </Console>
     </Appenders>
 
