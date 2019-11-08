@@ -51,7 +51,7 @@ class PlaylistController {
 
     private fun requestParams(request: Request) : Pair<String, String> {
         var name = request.queryParams("user_name")
-        val url = request.queryParams("youtubeUrl")
+        val url = request.queryParams("text")
         if (name.isNullOrBlank()) name = "Unknown"
         return Pair(name, url)
     }

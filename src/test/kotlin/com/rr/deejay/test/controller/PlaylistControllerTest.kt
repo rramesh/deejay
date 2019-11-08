@@ -40,7 +40,7 @@ class PlaylistControllerTest {
         val url = "A Youtube URL"
 
         every{ mockRequest.queryParams("user_name")} returns userName
-        every{ mockRequest.queryParams("youtubeUrl")} returns url
+        every{ mockRequest.queryParams("text")} returns url
         every{ mockResponse.type("application/json")} just runs
         every{ service.addToPlaylist(userName, url)} returns true
 
@@ -62,7 +62,7 @@ class PlaylistControllerTest {
         val url = "A Youtube URL"
 
         every{ mockRequest.queryParams("user_name")} returns null
-        every{ mockRequest.queryParams("youtubeUrl")} returns url
+        every{ mockRequest.queryParams("text")} returns url
         every{ mockResponse.type("application/json")} just runs
         every{ service.addToPlaylist(userName, url)} returns true
 
@@ -82,7 +82,7 @@ class PlaylistControllerTest {
         val userName = "Raama"
 
         every{ mockRequest.queryParams("user_name")} returns userName
-        every{ mockRequest.queryParams("youtubeUrl")} returns null
+        every{ mockRequest.queryParams("text")} returns null
         every{ mockResponse.type("application/json")} just runs
 
         val expected = mutableMapOf(
@@ -101,7 +101,7 @@ class PlaylistControllerTest {
         val url = "A Youtube URL"
 
         every{ mockRequest.queryParams("user_name")} returns userName
-        every{ mockRequest.queryParams("youtubeUrl")} returns url
+        every{ mockRequest.queryParams("text")} returns url
         every{ mockResponse.type("text/plain")} just runs
         every{ service.addToPlaylist(userName, url)} returns true
 
@@ -119,7 +119,7 @@ class PlaylistControllerTest {
         val url = "A Youtube URL"
 
         every{ mockRequest.queryParams("user_name")} returns null
-        every{ mockRequest.queryParams("youtubeUrl")} returns url
+        every{ mockRequest.queryParams("text")} returns url
         every{ mockResponse.type("text/plain")} just runs
         every{ service.addToPlaylist(userName, url)} returns true
 
@@ -136,7 +136,7 @@ class PlaylistControllerTest {
         val userName = "Raama"
 
         every{ mockRequest.queryParams("user_name")} returns userName
-        every{ mockRequest.queryParams("youtubeUrl")} returns null
+        every{ mockRequest.queryParams("text")} returns null
         every{ mockResponse.type("text/plain")} just runs
 
         val expected = "Error, you didn't provide a valid youtube URL."
