@@ -1,6 +1,6 @@
 ## deejay - An automated DJ player for song requests
 
-Download the latest release [here](https://github.com/rramesh/deejay/releases/download/v0.1-alpha/deejay.jar)
+Download the latest release from [here](https://github.com/rramesh/deejay/releases)
 
 ### Prerequisites
 1. A *nix / MacOS system - preferably Raspberry Pi
