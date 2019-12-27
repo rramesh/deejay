@@ -18,5 +18,10 @@ PLAYLISTFILE=$2
 tail -f $PLAYLISTFILE | while read -r p || [ -n "$p" ]
 do
         echo "Now Playing $p"
+
+        # Uncomment below to use cvlc/vlc
         $EXECUTABLE --no-osd --no-video --play-and-exit "$p" > /dev/null
+
+        # Uncomment below to use mpv player
+        # $EXECUTABLE --no-video "$p" > /dev/null
 done

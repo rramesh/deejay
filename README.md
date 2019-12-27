@@ -5,7 +5,7 @@ Download the latest release from [here](https://github.com/rramesh/deejay/releas
 ### Prerequisites
 1. A *nix / MacOS system - preferably Raspberry Pi
 2. JRE 1.8+ installed
-3. VLC app installed (cvlc in linux systems)
+3. VLC app installed (cvlc in linux systems) (or mpv)
 4. A Speaker connected to the above system, wired or through Bluetooth
 5. Optionally slack account for Slack command integration
 
@@ -40,6 +40,13 @@ $./play.sh /Applications/VLC.app/Contents/MacOS/VLC /tmp/deejay.txt
 ```
 
 Please note, replace the vlc path with cvlc on linux systems and also if the playlist file is in a different path adjust that as well.
+
+> You could also use mpv player instead of cvlc. Edit the play.sh file and comment vlc section and uncomment the mpv section.
+> Start the player script (`play.sh`). For example in **nix system in Ubuntu, like below. 
+>```
+>$./play.sh /usr/bin/mpv /tmp/deejay.txt
+>```
+
 ### Using the service
 The service can simply be used on the browser by opening `http://<server ip>:9092/deejay/index.html`. Fill the name and Youtube URL and submit.
 
